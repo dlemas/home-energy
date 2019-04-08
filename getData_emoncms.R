@@ -16,6 +16,7 @@
 # install.packages(c("httr", "jsonlite", "lubridate"))
 library(keyringr)
 library(httr)
+library(dplyr)
 library(lubridate)
 library(jsonlite)
 
@@ -31,13 +32,20 @@ api_key <-paste0("apikey=",emoncms_token)
 url="https://emoncms.org/feed/timevalue.json?id=208024"
 req <- fromJSON(paste0(url, api_key))
 
+# start date
+start.time=as.Date("01-18-2017", "%m-%d-%Y") # 1516237260000
+
 url="https://emoncms.org/feed/data.json?"
-full.url=paste0(url,api_key,"&id=208024&start=1553473942000&end=1553560342000&interval=60");full.url
+full.url=paste0(url,api_key,"&id=208024&start=1516237260000&end=1554688346000&interval=604800");full.url
+# power for week starting with first day of data.
+# needs to be calibrated to calendar
 req <- fromJSON(full.url)
+df=as.data.frame(req)
+df$date=as.Date(as.POSIXct(df$V1/1000, origin="1970-01-01"))
 
-# worked! Was not using unixtime_milliseconds
+# ready for analysis.
 
-as.numeric(Sys.time()) * 1000
+
 
 
 
