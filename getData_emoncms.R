@@ -19,6 +19,16 @@ library(httr)
 library(dplyr)
 library(lubridate)
 library(jsonlite)
+# Load packages
+library(shiny)
+library(shinythemes)
+
+runExample("01_hello")
+
+# Load data
+trend_data <- read_csv("data/trend_data.csv")
+trend_description <- read_csv("data/trend_description.csv")
+
 
 # Get Emoncms API Token
 # https://cran.r-project.org/web/packages/jsonlite/vignettes/json-apis.html
