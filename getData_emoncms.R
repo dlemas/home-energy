@@ -8,7 +8,6 @@
 # IRB:
 # Description: Emoncms API system for emoncms project
 
-
 # **************************************************************************** #
 # ***************                Library                       *************** #
 # **************************************************************************** #
@@ -18,17 +17,13 @@ library(keyringr)
 library(httr)
 library(dplyr)
 library(lubridate)
-library(jsonlite)
+#library(jsonlite)
+library(RJSONIO)
+#library(rjson)
 # Load packages
-library(shiny)
-library(shinythemes)
-
-runExample("01_hello")
-
-# Load data
-trend_data <- read_csv("data/trend_data.csv")
-trend_description <- read_csv("data/trend_description.csv")
-
+#library(shiny)
+#library(shinythemes)
+options(scipen = 999)
 
 # Get Emoncms API Token
 # https://cran.r-project.org/web/packages/jsonlite/vignettes/json-apis.html
@@ -38,15 +33,20 @@ emoncms_token<-decrypt_dpapi_pw(credential_path)
 print(emoncms_token)
 api_key <-paste0("apikey=",emoncms_token)
 
-# Last updated time and value for feed
-url="https://emoncms.org/feed/timevalue.json?id=208024"
-req <- fromJSON(paste0(url, api_key))
+# start date/time
+start.time=as.POSIXct(strptime("2017-02-22 00:00:00", "%Y-%m-%d %H:%M:%S"))
+start.time.ms=as.numeric(start.time)*1000 # 1485061200000
+print(as.numeric(start.time)*1000, digits=15)
 
-# start date
-start.time=as.Date("01-18-2017", "%m-%d-%Y") # 1516237260000
+# stop date/time
+stop.time=as.POSIXct(strptime("2017-02-23 00:00:00", "%Y-%m-%d %H:%M:%S"))
+stop.time.ms=as.numeric(stop.time)*1000 # 1485147600000
+print(as.numeric(stop.time.ms)*1000, digits=15)
+
+# https://emoncms.org/site/api#feed
 
 url="https://emoncms.org/feed/data.json?"
-full.url=paste0(url,api_key,"&id=208024&start=1516237260000&end=1554688346000&interval=604800");full.url
+full.url=paste0(url,api_key,"&id=208024&start=",start.time.ms,"&end=",stop.time.ms,"&interval=3600");full.url
 # power for week starting with first day of data.
 # needs to be calibrated to calendar
 req <- fromJSON(full.url)
