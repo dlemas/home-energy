@@ -17,8 +17,8 @@ library(keyringr)
 library(httr)
 library(dplyr)
 library(lubridate)
-#library(jsonlite)
-library(RJSONIO)
+library(jsonlite)
+#library(RJSONIO)
 #library(rjson)
 # Load packages
 #library(shiny)
@@ -33,29 +33,23 @@ emoncms_token<-decrypt_dpapi_pw(credential_path)
 print(emoncms_token)
 api_key <-paste0("apikey=",emoncms_token)
 
-# start date/time
-start.time=as.POSIXct(strptime("2017-02-22 00:00:00", "%Y-%m-%d %H:%M:%S"))
-start.time.ms=as.numeric(start.time)*1000 # 1485061200000
-print(as.numeric(start.time)*1000, digits=15)
-
-# stop date/time
-stop.time=as.POSIXct(strptime("2017-02-23 00:00:00", "%Y-%m-%d %H:%M:%S"))
-stop.time.ms=as.numeric(stop.time)*1000 # 1485147600000
-print(as.numeric(stop.time.ms)*1000, digits=15)
-
 # https://emoncms.org/site/api#feed
 
-url="https://emoncms.org/feed/data.json?"
-full.url=paste0(url,api_key,"&id=208024&start=",start.time.ms,"&end=",stop.time.ms,"&interval=3600");full.url
-# power for week starting with first day of data.
-# needs to be calibrated to calendar
+# start date/time
+start.time=as.POSIXct(strptime("2018-01-17 20:01:00", "%Y-%m-%d %H:%M:%S"))
+start.time.ms=as.numeric(start.time)*1000 # 1516237260000
+# Wed Jan 17 2018 20:01:00 : 1516237260000
+
+# stop date/time
+stop.time=as.POSIXct(strptime("2019-04-07 21:52:26", "%Y-%m-%d %H:%M:%S"))
+stop.time.ms=as.numeric(stop.time)*1000 # 1554688346000
+# Sun Apr 07 2019 21:52:26 : 1554688346000
+
+# pull data
+url="https://emoncms.org/feed/data.json?";url
+full.url=paste0(url,api_key,"&id=208024&start=",start.time.ms,"&end=",stop.time.ms,"&interval=604800");full.url
 req <- fromJSON(full.url)
-df=as.data.frame(req)
-df$date=as.Date(as.POSIXct(df$V1/1000, origin="1970-01-01"))
 
-# ready for analysis.
-
-
-
-
-
+# format
+df1=df %>% as.data.frame() %>%
+  mutate(date=as.Date(as.POSIXct(df$V1/1000, origin="1970-01-01")))
