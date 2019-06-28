@@ -18,6 +18,7 @@ library(httr)
 library(dplyr)
 library(lubridate)
 library(jsonlite)
+library(tidyverse)
 #library(RJSONIO)
 #library(rjson)
 # Load packages
@@ -36,19 +37,45 @@ api_key <-paste0("apikey=",emoncms_token)
 # https://emoncms.org/site/api#feed
 
 # start date/time
-start.time=as.POSIXct(strptime("2018-01-01 00:00:00", "%Y-%m-%d %H:%M:%S"))
+start.time=as.POSIXct(strptime("2017-01-01 00:00:00", "%Y-%m-%d %H:%M:%S"))
 start.time.ms=as.numeric(start.time)*1000 
-
 
 # stop date/time
 stop.time=as.POSIXct(strptime("2019-06-01 00:00:00", "%Y-%m-%d %H:%M:%S"))
 stop.time.ms=as.numeric(stop.time)*1000 
 
-# pull data
+# pull data: interval in seconds
 url="https://emoncms.org/feed/data.json?";url
-full.url=paste0(url,api_key,"&id=208024&start=",start.time.ms,"&end=",stop.time.ms,"&interval=604800");full.url
-full.url=paste0(url,api_key,"&id=208024&start=",start.time.ms,"&end=",stop.time.ms,"&mode=daily");full.url
+# full.url=paste0(url,api_key,"&id=208024&start=",start.time.ms,"&end=",stop.time.ms,"&interval=604800");full.url
+# full.url=paste0(url,api_key,"&id=208024&start=",start.time.ms,"&end=",stop.time.ms,"&mode=daily");full.url
+full.url=paste0(url,api_key,"&id=208024&start=",start.time.ms,"&end=",stop.time.ms,"&interval=3600");full.url
+
+# pull data
 req <- fromJSON(full.url)
+# count datapoints: most likely need to batch b/c files are large
+datapoints=as.numeric(str_split(req$message, "=")[[1]][2])
+
+# batch pull
+batch=round(datapoints/2500, 0)+1;batch
+baseurl=full.url
+# baseurl <- "https://projects.propublica.org/nonprofits/api/v2/search.json?order=revenue&sort_order=desc"
+pages <- list()
+for(i in 0:2){
+  mydata <- fromJSON(paste0(baseurl, "&page=", i))
+  message("Retrieving page ", i)
+  pages[[i+1]] <- mydata$organizations
+}
+
+#combine all into one
+organizations <- rbind_pages(pages)
+
+
+mydata0 <- fromJSON(paste0(full.url, "&page=0"), flatten = TRUE)
+
+
+
+
+
 
 # format
 df1=req %>% as.data.frame() %>%
@@ -56,3 +83,18 @@ df1=req %>% as.data.frame() %>%
   rename(KWh=V2)
 names(df1)
 plot(df1$date,df1$KWh)
+
+# Process the entire data set in batches of 100
+# This takes a while :-)
+batch=4457880/2500
+baseurl=full.url
+# baseurl <- "https://projects.propublica.org/nonprofits/api/v2/search.json?order=revenue&sort_order=desc"
+pages <- list()
+for(i in 0:2){
+  mydata <- fromJSON(paste0(baseurl, "&page=", i))
+  message("Retrieving page ", i)
+  pages[[i+1]] <- mydata$organizations
+}
+
+#combine all into one
+organizations <- rbind_pages(pages)
