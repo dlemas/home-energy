@@ -41,20 +41,17 @@ start.time=as.POSIXct(strptime("2018-02-01 00:00:00", "%Y-%m-%d %H:%M:%S"))
 start.time.ms=as.numeric(start.time)*1000 
 
 # stop date/time
-stop.time=as.POSIXct(strptime("2019-06-01 00:00:00", "%Y-%m-%d %H:%M:%S"))
+stop.time=as.POSIXct(strptime("2018-04-01 00:00:00", "%Y-%m-%d %H:%M:%S"))
 stop.time.ms=as.numeric(stop.time)*1000 
 
-# loop through days
-# time.interval <- start.time %--% stop.time
-# time.duration <- as.duration(time.interval)
-# days_between=round(as.numeric(time.duration)/86400,0) # seconds in day
-
-date.list=seq(start.time, stop.time, by="days")
+# days list
+date.seq=seq(start.time, stop.time, by="days")
+date.list=as.Date(date.seq,format ="%m/%d/%y")
 index=length(date.list)
 
 # Start the Loop
 days<- list()
-for (i in 1:(index))
+for (i in 1:(index))  # issue with 40th date. missing data?
 {
   # dates to pull data b/w
   start=ymd(date.list[i])
@@ -82,12 +79,13 @@ for (i in 1:(index))
   rename(KWh=V2, time_unix=V1)
   
   # add to list
-  days[[i+1]] <- mydata
+  days[[i]] <- mydata
 }
 
 #combine all into one
 house_kwh <- rbind_pages(days)
-  
+names(house_kwh)
+head(house_kwh)
   
 
 
