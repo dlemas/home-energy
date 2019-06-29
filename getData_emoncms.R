@@ -41,7 +41,7 @@ start.time=as.POSIXct(strptime("2018-02-01 00:00:00", "%Y-%m-%d %H:%M:%S"))
 start.time.ms=as.numeric(start.time)*1000 
 
 # stop date/time
-stop.time=as.POSIXct(strptime("2018-04-01 00:00:00", "%Y-%m-%d %H:%M:%S"))
+stop.time=as.POSIXct(strptime("2019-02-01 00:00:00", "%Y-%m-%d %H:%M:%S"))
 stop.time.ms=as.numeric(stop.time)*1000 
 
 # days list
@@ -87,16 +87,3 @@ house_kwh <- rbind_pages(days)
 names(house_kwh)
 head(house_kwh)
   
-
-
-
-
-
-
-# emoncms url
-url="https://emoncms.org/feed/data.json?";url
-# full.url=paste0(url,api_key,"&id=208024&start=",start.time.ms,"&end=",stop.time.ms,"&interval=43200");full.url
-# full.url=paste0(url,api_key,"&id=208024&start=",start.time.ms,"&end=",stop.time.ms,"&mode=daily");full.url
-full.url=paste0(url,api_key,"&id=208024&start=",start.time.ms,"&end=",stop.time.ms,"&interval=43200");full.url # daily
-full.url=paste0(url,api_key,"&id=208024&start=",start.time.ms,"&end=",stop.time.ms,"&interval=60");full.url # daily
-
