@@ -37,11 +37,13 @@ api_key <-paste0("apikey=",emoncms_token)
 # https://emoncms.org/site/api#feed
 
 # start date/time
-start.time=as.POSIXct(strptime("2018-02-01 00:00:00", "%Y-%m-%d %H:%M:%S"))
+start.time=as.POSIXct(strptime("2018-01-17 00:00:00", "%Y-%m-%d %H:%M:%S"))
 start.time.ms=as.numeric(start.time)*1000 
 
 # stop date/time
-stop.time=as.POSIXct(strptime("2019-02-01 00:00:00", "%Y-%m-%d %H:%M:%S"))
+stop.time=Sys.time()
+# stop.time=as.POSIXct(stop.time)
+# stop.time=as.POSIXct(strptime("2018-06-01 00:00:00", "%Y-%m-%d %H:%M:%S"))
 stop.time.ms=as.numeric(stop.time)*1000 
 
 # days list
@@ -72,18 +74,23 @@ for (i in 1:(index))  # issue with 40th date. missing data?
 
   # pull data
   req <- fromJSON(full.url)
-  
-  # format data
-  mydata=req %>% as.data.frame() %>%
-  mutate(date_hms=as.POSIXct(V1/1000, origin="1970-01-01")) %>%
-  rename(KWh=V2, time_unix=V1)
-  
+  mydata=req %>% as.data.frame()
+
   # add to list
   days[[i]] <- mydata
 }
 
 #combine all into one
-house_kwh <- rbind_pages(days)
-names(house_kwh)
-head(house_kwh)
-  
+days_flat <- rbind_pages(days)
+
+# output files
+data.file.name="kwh.csv";data.file.name
+data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Dropbox (UFL)\\02_Projects\\EMONCMS\\data\\");data.dir
+data.file.path=paste0(data.dir,data.file.name);data.file.path
+
+# format data
+house_kwh=days_flat %>%
+mutate(date_hms=as.POSIXct(V1/1000, origin="1970-01-01")) %>%
+rename(kwh=V2, time_unix=V1) %>%
+write.csv(.,file=data.file.path,row.names=F)
+
