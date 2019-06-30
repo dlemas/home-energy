@@ -1,6 +1,7 @@
 library(shiny)
 library(dplyr)
 library(ggplot2)
+# https://deanattali.com/blog/building-shiny-apps-tutorial/#3-create-an-empty-shiny-app
 bcl <- read.csv("bcl-data.csv", stringsAsFactors = FALSE)
 
 ui <- fluidPage(
