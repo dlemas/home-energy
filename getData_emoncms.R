@@ -12,6 +12,9 @@
 # ***************                Library                       *************** #
 # **************************************************************************** #
 
+bcl <- read.csv("bcl-data.csv", stringsAsFactors = FALSE)
+
+
 # install.packages(c("httr", "jsonlite", "lubridate"))
 library(keyringr)
 library(httr)
