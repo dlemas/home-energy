@@ -21,6 +21,7 @@ options(scipen = 999)
 ```
 
 ```{r}
+power=getKWData()
 
 ```
 

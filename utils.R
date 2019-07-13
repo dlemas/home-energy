@@ -13,7 +13,7 @@ getKWData <- function(){
   api_key <-paste0("apikey=",emoncms_token)
   
   # start date/time
-  start.time=as.POSIXct(strptime("2018-01-17 00:00:00", "%Y-%m-%d %H:%M:%S"))
+  start.time=as.POSIXct(strptime("2019-07-04 00:00:00", "%Y-%m-%d %H:%M:%S"))
   start.time.ms=as.numeric(start.time)*1000 
   
   # stop date/time
@@ -59,11 +59,13 @@ getKWData <- function(){
   
   # output files
   data.file.name="kwh.csv";data.file.name
+  data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Dropbox (UFL)\\02_Projects\\EMONCMS\\data\\");data.dir
+  data.file.path=paste0(data.dir,data.file.name);data.file.path
   
   # format data
   power=days_flat %>%
     mutate(date_hms=as.POSIXct(V1/1000, origin="1970-01-01")) %>%
     rename(kw=V2, time_unix=V1) %>%
-    write.csv(.,file=data.file.name,row.names=F)
+    write.csv(.,file=data.data.file.path,row.names=F)
 }
 
