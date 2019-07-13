@@ -12,21 +12,13 @@
 # ***************                Library                       *************** #
 # **************************************************************************** #
 
-bcl <- read.csv("bcl-data.csv", stringsAsFactors = FALSE)
-
-
-# install.packages(c("httr", "jsonlite", "lubridate"))
 library(keyringr)
 library(httr)
 library(dplyr)
 library(lubridate)
 library(jsonlite)
 library(tidyverse)
-#library(RJSONIO)
-#library(rjson)
-# Load packages
-#library(shiny)
-#library(shinythemes)
+library(ezknitr)
 options(scipen = 999)
 
 # Get Emoncms API Token
@@ -92,7 +84,7 @@ data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Dropbox (UFL)\\02_Projects\\EMONCMS
 data.file.path=paste0(data.dir,data.file.name);data.file.path
 
 # format data
-house_kwh=days_flat %>%
+power=days_flat %>%
 mutate(date_hms=as.POSIXct(V1/1000, origin="1970-01-01")) %>%
 rename(kwh=V2, time_unix=V1) %>%
 write.csv(.,file=data.file.path,row.names=F)
