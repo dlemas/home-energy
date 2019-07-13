@@ -23,6 +23,8 @@ options(scipen = 999)
 ```{r}
 power=getKWData()
 
+power_update=updateKWData(power)
+
 ```
 
 

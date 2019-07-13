@@ -9,7 +9,6 @@ getKWData <- function(){
   credential_label <- "emoncms_api"
   credential_path <- paste(Sys.getenv("USERPROFILE"), '\\DPAPI\\passwords\\', Sys.info()["nodename"], '\\', credential_label, '.txt', sep="")
   emoncms_token<-decrypt_dpapi_pw(credential_path)
-  print(emoncms_token)
   api_key <-paste0("apikey=",emoncms_token)
   
   # start date/time
@@ -57,15 +56,44 @@ getKWData <- function(){
   #combine all into one
   days_flat <- rbind_pages(days)
   
-  # output files
-  data.file.name="kwh.csv";data.file.name
-  data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Dropbox (UFL)\\02_Projects\\EMONCMS\\data\\");data.dir
-  data.file.path=paste0(data.dir,data.file.name);data.file.path
-  
   # format data
   power=days_flat %>%
     mutate(date_hms=as.POSIXct(V1/1000, origin="1970-01-01")) %>%
-    rename(kw=V2, time_unix=V1) %>%
-    write.csv(.,file=data.data.file.path,row.names=F)
+    rename(kwh=V2, time_unix=V1) 
 }
 
+#' Update Home Power Data
+#' Queries the emoncms API to UPDATE home power (wats)
+#' every 60 seconds from start time to present
+#' https://emoncms.org/site/api#feed
+#' @return data.frame containing: unix-time, wat, date-time
+updateKWData <- function(power){
+
+  # Get Emoncms API Token
+  credential_label <- "emoncms_api"
+  credential_path <- paste(Sys.getenv("USERPROFILE"), '\\DPAPI\\passwords\\', Sys.info()["nodename"], '\\', credential_label, '.txt', sep="")
+  emoncms_token<-decrypt_dpapi_pw(credential_path)
+  api_key <-paste0("apikey=",emoncms_token)
+  
+  # start date/time
+  start.time=last(power$date_hms)+30
+  start.unix=as.numeric(start.time)*1000 
+  
+  # end date/time
+  stop.time=Sys.time()
+  end.unix=as.numeric(stop.time)*1000 
+  
+  # emoncms url
+  url="https://emoncms.org/feed/data.json?";url
+  full.url=paste0(url,api_key,"&id=208024&start=",start.unix,"&end=",end.unix,"&interval=60");full.url # min
+  
+  # pull data
+  power_new <- fromJSON(full.url) %>%
+  as.data.frame() %>%
+  mutate(date_hms=as.POSIXct(V1/1000, origin="1970-01-01")) %>%
+  rename(kwh=V2, time_unix=V1) 
+
+# combine with old data
+power_update <-rbind(power,power_new)
+
+}
