@@ -27,7 +27,8 @@ power_update=updateKWData(power)
 
 ```
 
-
+# https://github.com/ropensci/ezknitr#readme
+# https://github.com/slopp/scheduledsnow/blob/master/get_area_data.Rmd
 
 ## R Markdown
 
