@@ -4,7 +4,7 @@ library(markdown)
 library(rmarkdown)
 
 # directories
-analysis.dir=paste0(Sys.getenv("USERPROFILE"),"\\Documents\\GitHub\\emoncms\\")
+analysis.dir=paste0(Sys.getenv("USERPROFILE"),"\\Documents\\GitHub\\emoncms\\reports\\")
 out.dir=paste0(Sys.getenv("USERPROFILE"),"\\Dropbox (UFL)\\02_Projects\\EMONCMS\\reports\\")
 
 # execute report
