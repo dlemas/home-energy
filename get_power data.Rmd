@@ -31,7 +31,18 @@ power=getKWData()
 saveRDS(power, file=paste0(data.dir,"power.rds"))
 ```
 
-## Explore the Data
+# Data Description
+
+Data stored: 
+`data.dir`
+
+Start date:
+`first(power$date_hms)`
+
+End date:
+`last(power$date_hms)`
+
+# Explore the Data
 
 ```{r cars}
 power_1=power %>%
