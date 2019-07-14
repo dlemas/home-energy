@@ -44,7 +44,7 @@ End date:
 
 # Explore the Data
 
-```{r cars}
+```{r power}
 power_1=power %>%
   mutate(month=month(date_hms),
          day=day(date_hms),
