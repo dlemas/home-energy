@@ -16,36 +16,32 @@ library(dplyr)
 library(lubridate)
 library(jsonlite)
 library(tidyverse)
+library(scales)
 source("utils.R")
 options(scipen = 999)
+
+# output diectory
+data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Dropbox (UFL)\\02_Projects\\EMONCMS\\data\\")
 ```
+
 
 ```{r}
+# # Intall Run to get data
 power=getKWData()
-
-power_update=updateKWData(power)
-
+saveRDS(power, file=paste0(data.dir,"power.rds"))
 ```
 
-# https://github.com/ropensci/ezknitr#readme
-# https://github.com/slopp/scheduledsnow/blob/master/get_area_data.Rmd
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Explore the Data
 
 ```{r cars}
-summary(cars)
+power_1=power %>%
+  mutate(month=month(date_hms),
+         day=day(date_hms),
+         hour=hour(date_hms))
+
+ggplot(data = power_1, aes(x=date_hms, y=kwh))+
+  geom_line(color = "#00AFBB")
+
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

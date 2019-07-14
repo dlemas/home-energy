@@ -85,7 +85,7 @@ updateKWData <- function(power){
   
   # emoncms url
   url="https://emoncms.org/feed/data.json?";url
-  full.url=paste0(url,api_key,"&id=208024&start=",start.unix,"&end=",end.unix,"&interval=60");full.url # min
+  full.url=paste0(url,api_key,"&id=208024&start=",start.unix,"&end=",end.unix,"&interval=10");full.url # min
   
   # pull data
   power_new <- fromJSON(full.url) %>%

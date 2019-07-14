@@ -1,0 +1,54 @@
+---
+title: "update_power_data"
+author: "Dominick Lemas"
+date: "7/13/2019"
+output: html_document
+---
+
+Document run at: `r Sys.time()`.
+Description: Update Emoncms API system for emoncms project
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(keyringr)
+library(httr)
+library(dplyr)
+library(lubridate)
+library(jsonlite)
+library(tidyverse)
+source("utils.R")
+options(scipen = 999)
+
+# output diectory
+data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Dropbox (UFL)\\02_Projects\\EMONCMS\\data\\")
+```
+
+
+```{r}
+# update power
+readRDS(file=paste0(data.dir,"power.rds"))
+power_update=updateKWData(power)
+```
+
+# https://github.com/ropensci/ezknitr#readme
+# https://github.com/slopp/scheduledsnow/blob/master/get_area_data.Rmd
+
+# Update the data.frame on schedule
+
+```{r cars}
+# update power
+readRDS(file=paste0(data.dir,"power.rds"))
+power_update=updateKWData(power)
+
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+
