@@ -27,24 +27,26 @@ data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Dropbox (UFL)\\02_Projects\\EMONCMS
 
 ```{r}
 # # Intall Run to get data
-power=getKWData()
+
+api_key=get_API_token("emoncms_api")
+power=getKWData(api_key, "2019-07-01", 40)
 saveRDS(power, file=paste0(data.dir,"power.rds"))
 ```
 
 # Data Description
 
 Data stored: 
-`data.dir`
+`r data.dir`
 
 Start date:
-`first(power$date_hms)`
+`r first(power$date_hms)`
 
 End date:
-`last(power$date_hms)`
+`r last(power$date_hms)`
 
 # Explore the Data
 
-```{r power}
+```{r}
 power_1=power %>%
   mutate(month=month(date_hms),
          day=day(date_hms),
