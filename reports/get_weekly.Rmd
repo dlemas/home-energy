@@ -1,0 +1,108 @@
+---
+title: "get-weekly"
+author: "Dominick Lemas"
+date: "7/15/2019"
+output: html_document
+---
+
+Document run at: `r Sys.time()`.
+Description: Weekly report on power consumption
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(keyringr)
+library(httr)
+library(dplyr)
+library(lubridate)
+library(jsonlite)
+library(tidyverse)
+library(scales)
+source("~/GitHub/emoncms/config/utils.R")
+options(scipen = 999)
+
+# output diectory
+data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Dropbox (UFL)\\02_Projects\\EMONCMS\\data\\")
+```
+
+
+```{r}
+# get data
+api_key=get_API_token("emoncms_api")
+power=getKWData(api_key, "2019-07-01", "daily")
+# saveRDS(power, file=paste0(data.dir,"power.rds"))
+```
+
+# Data Description
+
+Data stored: 
+`r data.dir`
+
+Start date:
+`r first(power$date_hms)`
+
+End date:
+`r last(power$date_hms)`
+
+# Compute Week Data
+
+```{r}
+power=power %>%
+  mutate(wdays=wday(date_hms),
+         weekdays(date_hms),
+         kwh_lag=lag(kwh, 1),
+         kwh_daily=kwh-kwh_lag) %>%
+  select(-kwh_lag) %>%
+  rename(day_of_week='weekdays(date_hms)')
+
+# entered from function
+temp_date="2019-07-14"
+
+# 7 days 
+seven_days_prior=ymd(temp_date)-days(7)
+day7=power %>%
+  filter(date_hms==seven_days_prior) %>%
+  select(day_of_week, date_hms, kwh_daily)
+
+# 6 days
+six_days_prior=ymd(temp_date)-days(6)
+day6=power %>%
+  filter(date_hms==six_days_prior) %>%
+  select(day_of_week, date_hms, kwh_daily)
+
+# 5 days
+five_days_prior=ymd(temp_date)-days(5)
+day5=power %>%
+  filter(date_hms==five_days_prior) %>%
+  select(day_of_week, date_hms, kwh_daily)
+
+# 4 days
+four_days_prior=ymd(temp_date)-days(4)
+day4=power %>%
+  filter(date_hms==four_days_prior) %>%
+  select(day_of_week, date_hms, kwh_daily)
+
+# 3 days
+three_days_prior=ymd(temp_date)-days(3)
+day3=power %>%
+  filter(date_hms==three_days_prior) %>%
+  select(day_of_week, date_hms, kwh_daily)
+
+# 2 days
+two_days_prior=ymd(temp_date)-days(2)
+day2=power %>%
+  filter(date_hms==two_days_prior) %>%
+  select(day_of_week, date_hms, kwh_daily)
+
+# 1 days
+one_days_prior=ymd(temp_date)-days(1)
+day1=power %>%
+  filter(date_hms==one_days_prior) %>%
+  select(day_of_week, date_hms, kwh_daily)
+
+# final data
+week=rbind(day7,day6, day5, day4, day3, day2, day1)
+
+
+```
+
+

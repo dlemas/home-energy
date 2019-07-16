@@ -43,8 +43,11 @@ getKWData <- function(api_key, start_date, seconds){
     
             # emoncms url
             url="https://emoncms.org/feed/data.json?";url
-            full.url=paste0(url,api_key,"&id=208024&start=",start.unix,"&end=",end.unix,"&interval=",seconds);full.url # min
+            full.url=paste0(url,api_key,"&id=208025&start=",start.unix,"&end=",end.unix,"&mode=",seconds);full.url # min
     
+           # https://www.emoncms.org/feed/data.json?id=0&start=UNIXTIME_MILLISECONDS&end=UNIXTIME_MILLISECONDS&mode=daily
+            
+            
             # pull data
             req <- fromJSON(full.url)
             mydata=req %>% as.data.frame()
