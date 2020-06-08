@@ -17,10 +17,10 @@ library(lubridate)
 library(jsonlite)
 library(tidyverse)
 library(scales)
-source("~/GitHub/emoncms/config/utils.R")
+source("~/home-energy/utils.R")
 options(scipen = 999)
 
-# output diectory
+# output directory
 data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Dropbox (UFL)\\02_Projects\\EMONCMS\\data\\")
 ```
 
