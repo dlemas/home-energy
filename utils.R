@@ -5,7 +5,7 @@ get_API_token <- function(credential_label){
   #credential_label <- "emoncms_api"
   credential_path <- paste(Sys.getenv("USERPROFILE"), '\\DPAPI\\passwords\\', Sys.info()["nodename"], '\\', credential_label, '.txt', sep="")
   emoncms_token<-decrypt_dpapi_pw(credential_path)
-  api_key <-paste0("apikey=",emoncms_token)
+  api_key <-paste0("api_key=",emoncms_token)
   return(api_key)
 }
 
