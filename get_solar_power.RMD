@@ -31,29 +31,73 @@ api_key=get_API_token("solar_api")
 # saveRDS(power, file=paste0(data.dir,"power.rds"))
 
 
-# Detailed power information
-#---------------------------
+# site power 
+#----------
+Description: Return the site power measurements in 15 minutes resolution.
+URL: /site/{siteId}/ power
+Example URL: https://monitoringapi.solaredge.com/site/1/power?startTime=2013-05-5%2011:00:00&endTime=2013-05-05%2013:00:00&api_key=L4QLVQ1LOKCQX2193VSEICXW61NP6B1O
+Method: GET
+Accepted formats: JSON, XML and CSV
 
-# URL: /site/{siteId}/powerDetails  
-
-https://monitoringapi.solaredge.com/site/1/powerDetails?meters=PRODUCTION,CONSUMPTION&startTime=2015-1121%2011:00:00&endTime=2015-11-22%2013:00:00&api_key=L4QLVQ1LOKCQX2193VSEICXW61NP6B1O  
-
-  # url
+# url
     url="https://monitoringapi.solaredge.com/site/";url
   
   # API parameters
     site_ID="1219503/"
-    param1="powerDetails?"
-    param2="meters=PRODUCTION,CONSUMPTION&"
-    start.time="2019-10-15 00:00:00&" 
-    end.time="2020-06-08 00:00:00&"
+    param1="power?"
+    start.time="startTime=2020-05-5%2011:00:00&" 
+    end.time="endTime=2020-05-05%2013:00:00&"
+    
+ # data pull
+   full.url=paste0(url,site_ID,param1,start.time,end.time,api_key);full.url # min
+   power <- fromJSON(full.url);power
 
-  full.url="https://monitoringapi.solaredge.com/site/1219503/powerDetails?meters=PRODUCTION,CONSUMPTION&2020-6-01&2020-06-08&api_key="
+# Site overview
+#--------------
+Description: Display the site overview data.
+URL: /site/{siteId}/ overview
+Example URL: https://monitoringapi.solaredge.com/ site/{siteId}/overview?api_key=L4QLVQ1LOKCQX2193VSEICXW61NP6B1O
+Method: GET
+Accepted formats: JSON and XML
 
-   full.url=paste0(url,site_ID,param1,param2,start.time,end.time,api_key);full.url # min
-  power_detailed <- fromJSON(full.url);timeframe
 
+# url
+    url="https://monitoringapi.solaredge.com/site/";url
   
+  # API parameters
+    site_ID="1219503/"
+    param1="overview?"
+    
+ # data pull
+   full.url=paste0(url,site_ID,param1,api_key);full.url # min
+   overview <- fromJSON(full.url);overview
+
+
+# Detailed power information
+#---------------------------
+Description: Detailed site power measurements from meters such as consumption, export (feed-in), import (purchase), etc.
+Note: Calculated meter readings (also referred to as "virtual meters"), such as self-consumption, are calculated using the data
+measured by the meter and the inverters.
+URL: /site/{siteId}/powerDetails
+Method: GET
+
+Example URL: https://monitoringapi.solaredge.com/site/1/powerDetails?meters=PRODUCTION,CONSUMPTION&startTime=2015-11-
+21%2011:00:00&endTime=2015-11-22%2013:00:00&api_key=L4QLVQ1LOKCQX2193VSEICXW61NP6B1O
+
+# url
+    url="https://monitoringapi.solaredge.com/site/";url
+  
+  # API parameters
+    site_ID="1219503/"
+    param1="powerDetails?meters=PRODUCTION,CONSUMPTION&"
+    start.time="startTime=2020-05-5%2011:00:00&" 
+    end.time="endTime=2020-05-05%2013:00:00&"
+  
+  # data pull
+   full.url=paste0(url,site_ID,param1,start.time,end.time,api_key);full.url # min
+   power_detailed <- fromJSON(full.url);power_detailed
+   power_detailed$powerDetails$meters$values
+   
 
 # timeframe
 #----------
