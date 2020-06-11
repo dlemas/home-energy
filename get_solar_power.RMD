@@ -21,56 +21,19 @@ source("~/home-energy/utils.R")
 options(scipen = 999)
 
 # output directory
-data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Dropbox (UFL)\\02_Projects\\EMONCMS\\data\\")
+data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Documents\\home-energy\\data\\")
 ```
 
-# # Intall Run to get data
+# Solar Edge Api Key
 
-api_key=get_API_token("solar_api")
-#power=getKWData(api_key, "2019-07-01", 40)
-# saveRDS(power, file=paste0(data.dir,"power.rds"))
+api_key=paste0("api_key=",get_API_token("solar_api"));api_key
 
+# Querry SolarEdge 
 
-# site power 
-#----------
-Description: Return the site power measurements in 15 minutes resolution.
-URL: /site/{siteId}/ power
-Example URL: https://monitoringapi.solaredge.com/site/1/power?startTime=2013-05-5%2011:00:00&endTime=2013-05-05%2013:00:00&api_key=L4QLVQ1LOKCQX2193VSEICXW61NP6B1O
-Method: GET
-Accepted formats: JSON, XML and CSV
+power=sitepower(api_key)
 
-# url
-    url="https://monitoringapi.solaredge.com/site/";url
-  
-  # API parameters
-    site_ID="1219503/"
-    param1="power?"
-    start.time="startTime=2020-05-5%2011:00:00&" 
-    end.time="endTime=2020-05-05%2013:00:00&"
-    
- # data pull
-   full.url=paste0(url,site_ID,param1,start.time,end.time,api_key);full.url # min
-   power <- fromJSON(full.url);power
-
-# Site overview
-#--------------
-Description: Display the site overview data.
-URL: /site/{siteId}/ overview
-Example URL: https://monitoringapi.solaredge.com/ site/{siteId}/overview?api_key=L4QLVQ1LOKCQX2193VSEICXW61NP6B1O
-Method: GET
-Accepted formats: JSON and XML
-
-
-# url
-    url="https://monitoringapi.solaredge.com/site/";url
-  
-  # API parameters
-    site_ID="1219503/"
-    param1="overview?"
-    
- # data pull
-   full.url=paste0(url,site_ID,param1,api_key);full.url # min
-   overview <- fromJSON(full.url);overview
+# site overview
+overview=siteoverview(api_key)
 
 
 # Detailed power information

@@ -2,11 +2,10 @@
 #' @return api token
 get_API_token <- function(credential_label){
   # Get Emoncms API Token
-  #credential_label <- "emoncms_api"
   credential_path <- paste(Sys.getenv("USERPROFILE"), '\\DPAPI\\passwords\\', Sys.info()["nodename"], '\\', credential_label, '.txt', sep="")
-  emoncms_token<-decrypt_dpapi_pw(credential_path)
-  api_key <-paste0("api_key=",emoncms_token)
-  return(api_key)
+  token<-decrypt_dpapi_pw(credential_path)
+  #api_key <-paste0("api_key=",emoncms_token)
+  return(token)
 }
 
 #' Get Home Power Data
@@ -94,3 +93,55 @@ updateKWData <- function(api_key, power){
 power_update <-rbind(power,power_new)
 
 }
+
+#' Description: Return the site power measurements in 15 minutes resolution.
+#' Queries the solaredge API 
+#' URL: /site/{siteId}/ power
+#' 1 month between dates.
+#' Example URL: https://monitoringapi.solaredge.com/site/1/power?startTime=2013-05-5%2011:00:00&endTime=2013-05-05%2013:00:00&api_key=L4QLVQ1LOKCQX2193VSEICXW61NP6B1O
+#' Method: GET
+#' Accepted formats: JSON, XML and CSV
+#' @return data.frame containing: unix-date/time, value (wat)
+sitepower <- function(api_key){
+
+  #need to add dates in function. need to make function to link data for time span
+  # that exceeds 1 month.
+  
+  # url
+  url="https://monitoringapi.solaredge.com/site/";url
+
+  # API parameters
+  site_ID="1219503/"
+  param1="power?"
+  start.time="startTime=2020-05-5%2011:00:00&" 
+  end.time="endTime=2020-05-05%2013:00:00&"
+
+  # data pull
+  full.url=paste0(url,site_ID,param1,start.time,end.time,api_key);full.url # min
+  power <- fromJSON(full.url) %>%
+    as.data.frame() 
+  
+} # end function
+
+#' Description: Display the site overview data.
+#' Queries the solaredge API 
+#' URL: /site/{siteId}/ overview
+#' Example URL: https://monitoringapi.solaredge.com/ site/{siteId}/overview?api_key=L4QLVQ1LOKCQX2193VSEICXW61NP6B1O
+#' Method: GET
+#' Accepted formats: JSON and XML 
+#' @return data.frame containing: unix-date/time, value (wat)
+siteoverview <- function(api_key){
+
+  # url
+  url="https://monitoringapi.solaredge.com/site/";url
+
+  # API parameters
+  site_ID="1219503/"
+  param1="overview?"
+
+  # data pull
+  full.url=paste0(url,site_ID,param1,api_key);full.url # min
+  overview <- fromJSON(full.url)%>%
+    as.data.frame() 
+  
+} # end function
