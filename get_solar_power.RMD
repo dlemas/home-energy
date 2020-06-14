@@ -30,7 +30,7 @@ api_key=paste0("api_key=",get_API_token("solar_api"));api_key
 
 # Querry SolarEdge 
 
-power=sitepower(api_key)
+power=sitepower(api_key);power
 
 # site overview
 overview=siteoverview(api_key)
