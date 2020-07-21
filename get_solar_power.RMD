@@ -6,7 +6,8 @@ output: html_document
 ---
 
 Document run at: `r Sys.time()`.
-Description: Emoncms API system for emoncms project
+Description: API system to query solar production
+Website: https://www.solaredge.com/sites/default/files/se_monitoring_api.pdf
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -24,139 +25,23 @@ options(scipen = 999)
 data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Documents\\home-energy\\data\\")
 ```
 
-# Solar Edge Api Key
-
+```{r setup, include=FALSE}
+# Api Key
+#--------
 api_key=paste0("api_key=",get_API_token("solar_api"));api_key
 
-# Querry SolarEdge 
-
-power=sitepower(api_key)
-
-# site overview
-overview=siteoverview(api_key)
-
-
-# Detailed power information
+# Detailed power information (wats)
 #---------------------------
-Description: Detailed site power measurements from meters such as consumption, export (feed-in), import (purchase), etc.
-Note: Calculated meter readings (also referred to as "virtual meters"), such as self-consumption, are calculated using the data
-measured by the meter and the inverters.
-URL: /site/{siteId}/powerDetails
-Method: GET
-
-Example URL: https://monitoringapi.solaredge.com/site/1/powerDetails?meters=PRODUCTION,CONSUMPTION&startTime=2015-11-
-21%2011:00:00&endTime=2015-11-22%2013:00:00&api_key=L4QLVQ1LOKCQX2193VSEICXW61NP6B1O
-
-# url
-    url="https://monitoringapi.solaredge.com/site/";url
+#Description: Detailed site power consumption
+  # need to modify function to 
+  # consider dates (start/stop) beyond 1 month.
   
-  # API parameters
-    site_ID="1219503/"
-    param1="powerDetails?meters=PRODUCTION,CONSUMPTION&"
-    start.time="startTime=2020-05-5%2011:00:00&" 
-    end.time="endTime=2020-05-05%2013:00:00&"
-  
-  # data pull
-   full.url=paste0(url,site_ID,param1,start.time,end.time,api_key);full.url # min
-   power_detailed <- fromJSON(full.url);power_detailed
-   power_detailed$powerDetails$meters$values
+power_wats=sitepower(api_key)
+saveRDS(power_wats, file = paste0(data.dir,"solar.rds"))
+
+```
+
+This R Markdown document runs on a scheduled basis to update get_solar_power.rds, which is a file located on shared storage and used by the dashboard.
+
+One benefit of having a scheduled Rmd instead of a scheduled .R file is a self-documenting log of the scheduled job!
    
-
-# timeframe
-#----------
-
- full.url="https://monitoringapi.solaredge.com/site/1219503/timeFrameEnergy?startDate=2019-10-15&endDate=2020-06-08&api_key="
-
-   # pull data
-  timeframe <- fromJSON(full.url);timeframe
-
-
-
-# start & end dates
-# URL: /site/{siteId}/dataPeriod
-
-full.url="https://monitoringapi.solaredge.com/site/1219503/dataPeriod?api_key=" 
-
-
-   # pull data
-  data_range <- fromJSON(full.url);data_range
-
-
-
-# Environmental Benefit
-#----------------------
-
-https://monitoringapi.solaredge.com/site/2/envBenefits?systemUnits=Imperial&api_key= 
-
-
-  # url
-    url="https://monitoringapi.solaredge.com/site/";url
-  
-  # API parameters
-    site_ID="1219503/"
-    param1="envBenefits?"
-    param2="systemUnits=Imperial&"
-    
-  
-  
-  full.url=paste0(url,site_ID,param1,param2,api_key);full.url # min
-  
-   # pull data
-  power_new <- fromJSON(full.url);power_new
-
-    
-
-# Inventory SolarEdge Equipment
-#------------------------------
-
-https://monitoringapi.solaredge.com/site/2/inventory?api_key= 
-
-  # url
-    url="https://monitoringapi.solaredge.com/site/";url
-  
-  # API parameters
-    site_ID="1219503/"
-    param1="inventory?"
-  
-  
-  full.url=paste0(url,site_ID,param1,api_key);full.url # min
-  
-   # pull data
-  power_new <- fromJSON(full.url)
-
-
-
-#' Update Home Solar Power Data
-#' Queries the SolarEdge API to UPDATE home solar power (wats)
-#' every 60 seconds from start time to present
-#' https://emoncms.org/site/api#feed
-#' @return data.frame containing: unix-time, wat, date-time
-solarKWData <- function(api_key, power){
-  
-  # start date/time
-  start.time=last(power$date_hms)+30
-  start.unix=as.numeric(start.time)*1000 
-  
-  # end date/time
-  stop.time=Sys.time()
-  end.unix=as.numeric(stop.time)*1000 
-  
-  # url
-  url="https://monitoringapi.solaredge.com/site/";url
-  
-  # API parameters
-  site_ID=1219503
-  
-  
-  full.url=paste0(url,api_key);full.url # min
-  
-  # pull data
-  power_new <- fromJSON(full.url) %>%
-  as.data.frame() %>%
-  mutate(date_hms=as.POSIXct(V1/1000, origin="1970-01-01")) %>%
-  rename(kwh=V2, time_unix=V1) 
-
-# combine with old data
-power_update <-rbind(power,power_new)
-
-}
