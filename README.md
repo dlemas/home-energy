@@ -1,5 +1,5 @@
 
-# emoncms
+# Home Power Integration
 
 This is a program to intergrate power consumption and solar power generation. 
 
