@@ -20,8 +20,6 @@ library(scales)
 source("~/home-energy/utils.R")
 options(scipen = 999)
 
-# output directory
-data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Dropbox (UFL)\\02_Projects\\EMONCMS\\data\\")
 ```
 
 
