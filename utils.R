@@ -118,7 +118,8 @@ sitepower <- function(api_key){
 
   # data pull
   full.url=paste0(url,site_ID,param1,start.time,end.time,api_key);full.url # min
-  power <- fromJSON(full.url) %>%
+  power_tmp <- fromJSON(full.url)
+  power=power_tmp$power$values %>%
     as.data.frame() 
   
 } # end function

@@ -1,3 +1,4 @@
+
 ---
 title: "get_solar_power"
 author: "Dominick J. Lemas"
@@ -34,32 +35,6 @@ power=sitepower(api_key);power
 
 # site overview
 overview=siteoverview(api_key)
-
-
-# Detailed power information
-#---------------------------
-Description: Detailed site power measurements from meters such as consumption, export (feed-in), import (purchase), etc.
-Note: Calculated meter readings (also referred to as "virtual meters"), such as self-consumption, are calculated using the data
-measured by the meter and the inverters.
-URL: /site/{siteId}/powerDetails
-Method: GET
-
-Example URL: https://monitoringapi.solaredge.com/site/1/powerDetails?meters=PRODUCTION,CONSUMPTION&startTime=2015-11-
-21%2011:00:00&endTime=2015-11-22%2013:00:00&api_key=L4QLVQ1LOKCQX2193VSEICXW61NP6B1O
-
-# url
-    url="https://monitoringapi.solaredge.com/site/";url
-  
-  # API parameters
-    site_ID="1219503/"
-    param1="powerDetails?meters=PRODUCTION,CONSUMPTION&"
-    start.time="startTime=2020-05-5%2011:00:00&" 
-    end.time="endTime=2020-05-05%2013:00:00&"
-  
-  # data pull
-   full.url=paste0(url,site_ID,param1,start.time,end.time,api_key);full.url # min
-   power_detailed <- fromJSON(full.url);power_detailed
-   power_detailed$powerDetails$meters$values
    
 
 # timeframe

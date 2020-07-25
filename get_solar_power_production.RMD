@@ -1,0 +1,47 @@
+---
+title: "get_solar_power"
+author: "Dominick J. Lemas"
+date: "June 8, 2020"
+output: html_document
+---
+
+Document run at: `r Sys.time()`.
+Description: API system to query solar production
+Website: https://www.solaredge.com/sites/default/files/se_monitoring_api.pdf
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(keyringr)
+library(httr)
+library(dplyr)
+library(lubridate)
+library(jsonlite)
+library(tidyverse)
+library(scales)
+source("~/home-energy/utils.R")
+options(scipen = 999)
+
+# output directory
+data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Documents\\home-energy\\data\\")
+```
+
+```{r setup, include=FALSE}
+# Api Key
+#--------
+api_key=paste0("api_key=",get_API_token("solar_api"));api_key
+
+# Detailed power information (wats)
+#---------------------------
+#Description: Detailed site power consumption
+  # need to modify function to 
+  # consider dates (start/stop) beyond 1 month.
+  
+power_wats=sitepower(api_key)
+saveRDS(power_wats, file = paste0(data.dir,"solar.rds"))
+
+```
+
+This R Markdown document runs on a scheduled basis to update get_solar_power.rds, which is a file located on shared storage and used by the dashboard.
+
+One benefit of having a scheduled Rmd instead of a scheduled .R file is a self-documenting log of the scheduled job!
+   
