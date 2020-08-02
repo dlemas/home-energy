@@ -3,12 +3,10 @@
 
 This is a program to intergrate power consumption and solar power generation. 
 
-Key functions
+### Key functions
 - sitepower()- total solar power for system b/w dates.
 
 
-
-=======
 ### Overview
 
 	project
@@ -25,7 +23,7 @@ Key functions
 	| +- scratch/     # temporary files that can be safely deleted or lost
 	|
 	|- presentation/  # powerpoint related to project 	
-  |
+        |
 	|- results        # all output from workflows and analyses
 	| |- tables/      # text version of tables to be rendered with kable in R
 	| |- figures/     # graphs, likely designated for manuscript figures
@@ -39,21 +37,21 @@ Key functions
 ### How to regenerate this repository
 
 #### Dependencies and locations
-* Gnu Make should be located in the user's PATH
-* mothur (v1.XX.0) should be located in the user's PATH
 * R (v. 3.X.X) should be located in the user's PATH
 * R packages:
   * `knitr`
   * `rmarkdown`
 * etc
 
-
 #### Running analysis
 
-```
-git clone https://github.com/SchlossLab/LastName_BriefDescription_Journal_Year.git
-make write.paper
-```
+Please refer to our [wiki](https://github.com/lemaslab/RUMP/wiki) for how to install and use RUMP
+
+## Bug reporting and feature requests
+
+Please submit questions, bug reports and feature requests to the issue tracker on GitHub:
+
+[RUMP issue tracker](https://github.com/lemaslab/RUMP/issues)
 
 ## References
 - Based on [tutorial](https://rviews.rstudio.com/2017/11/15/shiny-and-scheduled-data-r/)
