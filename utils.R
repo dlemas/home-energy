@@ -112,6 +112,8 @@ sitepower <- function(api_key, start_date, end_date){
   # start_date="05-05-2020"
   # end_date="06-25-2020"
     
+  # https://mgimond.github.io/ES218/Week02c.html
+  # https://cran.r-project.org/web/packages/jsonlite/jsonlite.pdf
 
   start.time=paste0("startTime=",start_date,"%2000:00:00&")
   end.time=paste0("endTime=",end_date,"%2000:00:00&")
