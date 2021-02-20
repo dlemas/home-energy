@@ -101,12 +101,16 @@ power_update <-rbind(power,power_new)
 #' Example URL: https://monitoringapi.solaredge.com/site/1/power?startTime=2013-05-5%2011:00:00&endTime=2013-05-05%2013:00:00&api_key=L4QLVQ1LOKCQX2193VSEICXW61NP6B1O
 #' Method: GET
 #' Accepted formats: JSON, XML and CSV
+#' Date format: mm-dd-yy
 #' @return data.frame containing: unix-date/time, value (wat)
 
 sitepower <- function(api_key, start_date, end_date){
 
-  #start_date="2020-05-05"
-  #end_date="2020-05-09"
+  tmp_start=mdy(start_date)
+  tmp_end=mdy(end_date)
+  
+  # start_date="05-05-2020"
+  # end_date="06-25-2020"
     
 
   start.time=paste0("startTime=",start_date,"%2000:00:00&")
@@ -118,8 +122,8 @@ sitepower <- function(api_key, start_date, end_date){
   # API parameters
   site_ID="1219503/"
   param1="power?"
-  start.time="startTime=2020-05-5%2011:00:00&" 
-  end.time="endTime=2020-05-05%2013:00:00&"
+  #start.time="startTime=2020-05-5%2011:00:00&" 
+  #end.time="endTime=2020-05-05%2013:00:00&"
 
   # data pull
   full.url=paste0(url,site_ID,param1,start.time,end.time,api_key);full.url # min
