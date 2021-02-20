@@ -22,13 +22,17 @@ source("~/home-energy/utils.R")
 options(scipen = 999)
 
 # output directory
-data.dir=paste0(Sys.getenv("USERPROFILE"),"\\Documents\\home-energy\\data\\")
+data.dir=paste0("~/home-energy/data/")
+
+# api key
+#--------
+api_key=paste0("api_key=",get_API_token("solar_api"));api_key
 ```
 
 ```{r setup, include=FALSE}
 # Api Key
 #--------
-api_key=paste0("api_key=",get_API_token("solar_api"));api_key
+# api_key=paste0("api_key=",get_API_token("solar_api"));api_key
 
 # Detailed power information (wats)
 #---------------------------
@@ -36,8 +40,8 @@ api_key=paste0("api_key=",get_API_token("solar_api"));api_key
   # need to modify function to 
   # consider dates (start/stop) beyond 1 month.
   
-power_wats=sitepower(api_key)
-saveRDS(power_wats, file = paste0(data.dir,"solar.rds"))
+solar_power_wats=sitepower(api_key, "2020-05-05", "2021-01-05")
+saveRDS(solar_power_wats, file = paste0(data.dir,"solar.rds"))
 
 ```
 
