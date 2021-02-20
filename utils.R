@@ -105,12 +105,12 @@ power_update <-rbind(power,power_new)
 
 sitepower <- function(api_key, start_date, end_date){
 
-  start_date="2020-05-05"
-  end_date="2020-05-08"
+  #start_date="2020-05-05"
+  #end_date="2020-05-09"
     
 
-  start.time=paste0("startTime=",start_date,"%2011:00:00&")
-  end.time=paste0("endTime=",end_date,"%2013:00:00&")
+  start.time=paste0("startTime=",start_date,"%2000:00:00&")
+  end.time=paste0("endTime=",end_date,"%2000:00:00&")
   
   # url
   url="https://monitoringapi.solaredge.com/site/";url
