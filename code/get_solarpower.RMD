@@ -39,7 +39,7 @@ api_key=paste0("api_key=",get_API_token("solar_api"));api_key
 #Description: Detailed site power consumption
 
 solar_power_wats=sitepower(api_key, "05-05-20", "02-21-21")
-saveRDS(solar_power_wats, file = paste0(data.dir,"solar.rds"))
+save(solar_power_wats, file = paste0(data.dir,"solar.RData"))
 
 ```
 

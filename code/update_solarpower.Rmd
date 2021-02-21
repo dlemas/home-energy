@@ -23,6 +23,7 @@ options(scipen = 999)
 
 # output directory
 data.dir=paste0("~/home-energy/data/")
+load("~/home-energy/data/solar.rds")
 
 # api key
 #--------
