@@ -37,10 +37,8 @@ api_key=paste0("api_key=",get_API_token("solar_api"));api_key
 # Detailed power information (wats)
 #---------------------------
 #Description: Detailed site power consumption
-  # need to modify function to 
-  # consider dates (start/stop) beyond 1 month.
-  
-solar_power_wats=sitepower(api_key, "05-05-20", "08-05-20")
+
+solar_power_wats=sitepower(api_key, "05-05-20", "02-21-21")
 saveRDS(solar_power_wats, file = paste0(data.dir,"solar.rds"))
 
 ```
