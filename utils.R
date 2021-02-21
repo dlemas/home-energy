@@ -105,58 +105,55 @@ power_update <-rbind(power,power_new)
 #' @return data.frame containing: unix-date/time, value (wat)
 
 # start_date="05-05-2020"
-# end_date="06-25-2020"
+# end_date="12-25-2020"
 
 sitepower <- function(api_key, start_date, end_date){
 
+  # https://mgimond.github.io/ES218/Week02c.html
+  # https://cran.r-project.org/web/packages/jsonlite/jsonlite.pdf
+  
   # date inputs
   tmp_start=mdy(start_date)
   tmp_end=mdy(end_date)
   
   # interval info
-  time.interval= tmp_start %--% tmp_end
-  time.duration <- as.duration(time.interval)
-  time.period <- as.period(time.interval)
+  # time.interval= tmp_start %--% tmp_end
+  # time.duration <- as.duration(time.interval)
+  # time.period <- as.period(time.interval)
   
-  # interval
-  int1 <- lubridate::interval(tmp_start,tmp_end)
-  int_start(int1)
-  int_end(int1)
-  group_start=seq(tmp_start,tmp_end, by = '1 month')
-  grp_length=length(group_start)
+  # batch
+  batch_dates=seq(tmp_start,tmp_end, by = '1 month')
+  date_interval<- interval(tmp_start,tmp_end)
+  last_date=int_end(date_interval)
+  batch_final=c(batch_dates,last_date)
+  
+  # loop  
   pages <- list()
-  for(i in 1:grp_length){
+  for(i in 1:length(batch_dates)){
     
-    start.time=paste0("startTime=",start_date,"%2000:00:00&")
-    end.time=paste0("endTime=",end_date,"%2000:00:00&")
+    # url
+    url="https://monitoringapi.solaredge.com/site/";url
     
-    mydata <- fromJSON(paste0(baseurl, "?order=revenue&sort_order=desc&page=", i))
-    message("Retrieving page ", i)
-    pages[[i+1]] <- mydata$organizations
-
+    # API parameters
+    site_ID="1219503/"
+    param1="power?"
     
-  # https://mgimond.github.io/ES218/Week02c.html
-  # https://cran.r-project.org/web/packages/jsonlite/jsonlite.pdf
-
-  start.time=paste0("startTime=",start_date,"%2000:00:00&")
-  end.time=paste0("endTime=",end_date,"%2000:00:00&")
+    # dates
+    start.time=paste0("startTime=",batch_final[i],"%2000:00:00&")
+    end.time=paste0("endTime=",batch_final[i+1],"%2000:00:00&")
+    
+    # data pull
+    full.url=paste0(url,site_ID,param1,start.time,end.time,api_key);full.url # min
+    power_tmp <- fromJSON(full.url)
+    power=power_tmp$power$values %>%
+      as.data.frame() 
+    pages[[i]] <- power
+    power_final=unlist(pages)
+    
+    } # end loop
+  power_final=bind_rows(pages)
   
-  # url
-  url="https://monitoringapi.solaredge.com/site/";url
-
-  # API parameters
-  site_ID="1219503/"
-  param1="power?"
-  #start.time="startTime=2020-05-5%2011:00:00&" 
-  #end.time="endTime=2020-05-05%2013:00:00&"
-
-  # data pull
-  full.url=paste0(url,site_ID,param1,start.time,end.time,api_key);full.url # min
-  power_tmp <- fromJSON(full.url)
-  power=power_tmp$power$values %>%
-    as.data.frame() 
-  
-} # end function
+  } # end function
 
 #' Description: Display the site overview data.
 #' Queries the solaredge API 
