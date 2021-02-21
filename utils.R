@@ -113,8 +113,8 @@ sitepower <- function(api_key, start_date, end_date){
   # https://cran.r-project.org/web/packages/jsonlite/jsonlite.pdf
   
   # date inputs
-  tmp_start=mdy(start_date)
-  tmp_end=mdy(end_date)
+  tmp_start=ymd(start_date)
+  tmp_end=ymd(end_date)
   
   # interval info
   # time.interval= tmp_start %--% tmp_end
