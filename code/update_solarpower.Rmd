@@ -34,8 +34,11 @@ api_key=paste0("api_key=",get_API_token("solar_api"));api_key
 
 # UPDATE solar-power data set
 
-solar_power_wats$date <- ymd_hms(solar_power_wats$date)
+solar_power_wats=solar_power_wats %>%
+  arrange(date) 
 
+first_date=first(solar_power_wats$date)
+last_date=last(solar_power_wats$date)
 
 # Solar power production (wats)
 #---------------------------
