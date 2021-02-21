@@ -23,7 +23,7 @@ options(scipen = 999)
 
 # output directory
 data.dir=paste0("~/home-energy/data/")
-load("~/home-energy/data/solar.rds")
+load("~/home-energy/data/solar.RData")
 
 # api key
 #--------
@@ -31,6 +31,10 @@ api_key=paste0("api_key=",get_API_token("solar_api"));api_key
 ```
 
 ```{r setup, include=FALSE}
+
+# UPDATE solar-power data set
+
+solar_power_wats$date <- ymd_hms(solar_power_wats$date)
 
 
 # Solar power production (wats)

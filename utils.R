@@ -152,6 +152,7 @@ sitepower <- function(api_key, start_date, end_date){
     
     } # end loop
   power_final=bind_rows(pages)
+  power_final$date=ymd_hms(power_final$date)
   
   } # end function
 
