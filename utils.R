@@ -104,8 +104,8 @@ power_update <-rbind(power,power_new)
 #' Date format: mm-dd-yy
 #' @return data.frame containing: unix-date/time, value (wat)
 
-# start_date="05-05-2020"
-# end_date="12-25-2020"
+# start_date='20-05-05'
+# end_date='20-12-25'
 
 sitepower <- function(api_key, start_date, end_date){
 
@@ -152,6 +152,8 @@ sitepower <- function(api_key, start_date, end_date){
     
     } # end loop
   power_final=bind_rows(pages)
+  #power_final$type="solar"
+  #power_final$units="wh"
   
   } # end function
 
