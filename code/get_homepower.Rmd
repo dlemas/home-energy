@@ -17,10 +17,13 @@ library(lubridate)
 library(jsonlite)
 library(tidyverse)
 library(scales)
-source("~/home-energy/code/home_utils.R")
+source("~/home-energy/code/utils/home_utils.R")
 options(scipen = 999)
 
 # https://emoncms.org/site/api#userguides
+
+# output directory
+data.dir=paste0("~/home-energy/data/")
 
 ```
 
@@ -42,8 +45,9 @@ options(scipen = 999)
 # # Intall Run to get data
 
 api_key=get_API_token("emoncms_api")
-power=getKWData(api_key, "2019-07-01", 40)
-saveRDS(power, file=paste0(data.dir,"power.rds"))
+homepower_kwh=getKWData(api_key, "2021-04-20", 900)
+save(homepower_kwh, file = paste0(data.dir,"home_kwh.RData"))
+
 ```
 
 # Data Description

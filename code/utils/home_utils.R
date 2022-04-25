@@ -17,11 +17,15 @@ getKWData <- function(api_key, start_date, seconds){
   
   # troubleshoot
   # (api_key, "2019-07-01", 40)
-  # start.time=ymd(c("2022-04-01"))
+  # start_date=c("2022-04-01")
   # stop.time=ymd(c("2022-04-03"))
+  # seconds=900
 
+  # api_key
+  KEY=paste0("&apikey=",api_key)
+  
   # dates
-  start.time=as.POSIXct(strptime(start_date, "%Y-%m-%d"))
+  start.time=ymd(start_date)
   stop.time=Sys.Date() 
   date.seq=seq(start.time, stop.time, by="days")
   date_hms=date.seq
@@ -58,9 +62,14 @@ getKWData <- function(api_key, start_date, seconds){
     
     
     # pull data
-    pull <- fromJSON(full.url)
-    mydata=pull %>% as.data.frame() %>%
-      mutate(tmp=V1)
+    mydata <- fromJSON(full.url) %>% as.data.frame() %>%
+      mutate(tmp=as.character(V1)) %>%
+      mutate(tmp01=substr(tmp,1,nchar(tmp)-3),
+             datetime_est=as_datetime(as.numeric(tmp01),tz = "America/New_York")) %>%
+      rename(kwh=V2) %>%
+      mutate(time_est= format(as.POSIXct(datetime_est),format = "%H:%M"),
+             date= as.Date(datetime_est)) %>%
+      select(date,time_est,kwh,datetime_est) 
     
     # add to list
     days[[i]] <- mydata
@@ -69,10 +78,11 @@ getKWData <- function(api_key, start_date, seconds){
   #combine all into one
   days_flat <- rbind_pages(days)
   
+  # drop duplicate rows that overlap b/w days
+  days_flat[!duplicated(days_flat$datetime_est), ]
+  
   # format data
-  power=days_flat %>%
-    mutate(date_hms=as.POSIXct(V1/1000, origin="1970-01-01")) %>%
-    rename(kwh=V2, time_unix=V1) 
+  homepower_kwh=days_flat %>% select(date,time_est,kwh) 
 }
 
 #' Update Home Power Data
