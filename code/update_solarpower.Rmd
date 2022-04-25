@@ -45,7 +45,8 @@ last_date=last(solar_power_wats$date)
 #Description: every 15 minutes, ymd
 
 solar_power_wats=sitepower(api_key, "20-05-05", "22-04-22")
-saveRDS(solar_power_wats, file = paste0(data.dir,"solar.rds"))
+save(solar_power_wats, file = paste0(data.dir,"solar.RData"))
+
 
 ```
 
