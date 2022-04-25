@@ -1,5 +1,5 @@
 ---
-title: "get_solar_power"
+title: "00_get_solar_power"
 author: "Dominick J. Lemas"
 date: "June 8, 2020"
 output: html_document
@@ -8,6 +8,7 @@ output: html_document
 Document run at: `r Sys.time()`.
 Description: API system to query solar production
 Website: https://www.solaredge.com/sites/default/files/se_monitoring_api.pdf
+Note: This script is run during program start-up. This script is not run on schedule.  
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -36,13 +37,13 @@ api_key=paste0("api_key=",get_API_token("solar_api"));api_key
 #---------------------------
 #Description: observation every 15 minutes
 
-solar_power_wats=sitepower(api_key, "20-05-05", "20-08-21")
+solar_power_wats=sitepower(api_key, "19-10-21", "21-04-21")
 solar_power_wats$date=ymd_hms(solar_power_wats$date)
 save(solar_power_wats, file = paste0(data.dir,"solar.RData"))
 
 ```
 
-This R Markdown document runs on a scheduled basis to update get_solar_power.rds, which is a file located on shared storage and used by the dashboard.
+This R Markdown document pulls solar data that is used by the dashboard.
 
-One benefit of having a scheduled Rmd instead of a scheduled .R file is a self-documenting log of the scheduled job!
+
    
