@@ -49,14 +49,14 @@ getKWData <- function(api_key, start_date, seconds){
     end.time=as.POSIXct(strptime(end_hms, "%Y-%m-%d %H:%M:%S"))
     end.unix=as.numeric(end.time)*1000 
     
-    # emoncms url
+    # accumulated totals
     url="https://emoncms.org/feed/data.json?";url
-    # url="https://emoncms.org/feed/average.json?";url
-    
     full.url=paste0(url,KEY,"&id=208025&start=",start.unix,"&end=",end.unix,"&mode=",seconds);full.url # min
-    # full.url=paste0(url,KEY,"&id=208025&start=",start.unix,"&end=",end.unix,"&mode=daily");full.url # min
-    # full.url=paste0(url,KEY,"&id=208025&start=",start.unix,"&end=",end.unix,"&interval=900");full.url # min
     
+    # # daily totals
+    # url_01="https://emoncms.org/feed/data.json?";url_01
+    # full.url_01=paste0(url_01,KEY,"&id=208025&start=",start.unix,"&end=",end.unix,"&mode=daily");full.url_01 # min
+    # 
 
     # https://www.emoncms.org/feed/data.json?id=0&start=UNIXTIME_MILLISECONDS&end=UNIXTIME_MILLISECONDS&mode=daily
     
