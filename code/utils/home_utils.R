@@ -17,7 +17,7 @@ getKWData <- function(api_key, start_date, seconds){
   
   # troubleshoot
   # (api_key, "2019-07-01", 40)
-  # start_date=c("2022-04-01")
+  # start_date=c("2022-04-20")
   # stop.time=ymd(c("2022-04-03"))
   # seconds=900
 
