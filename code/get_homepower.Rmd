@@ -17,13 +17,28 @@ library(lubridate)
 library(jsonlite)
 library(tidyverse)
 library(scales)
-source("~/home-energy/utils.R")
+source("~/home-energy/code/home_utils.R")
 options(scipen = 999)
+
+# https://emoncms.org/site/api#userguides
 
 ```
 
 
 ```{r}
+
+# List feeds for authenticated user
+  feedlist_url="https://emoncms.org/feed/list.json"
+  KEY=paste0("&apikey=",api_key)
+  feedlist_full.url=paste0(feedlist_url,KEY)
+# pull data
+  req <- fromJSON(feedlist_full.url)
+  mydata=req %>% as.data.frame()
+
+
+
+
+
 # # Intall Run to get data
 
 api_key=get_API_token("emoncms_api")
