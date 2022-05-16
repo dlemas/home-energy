@@ -22,6 +22,9 @@ options(scipen = 999)
 
 # https://emoncms.org/site/api#userguides
 
+# api key
+api_key=get_API_token("emoncms_api");api_key
+
 # output directory
 data.dir=paste0("~/home-energy/data/")
 
@@ -42,10 +45,19 @@ data.dir=paste0("~/home-energy/data/")
 
 ```{r}
 
-# Intall Run to get data
+# Run to get historical data. Missing data. 
+  # January 2018 - October 2018
+  # December 2018 - September 2019
+  # November 2019- May 2021
+  # August 2021 - present
 
-api_key=get_API_token("emoncms_api")
-homepower_kwh=getKWData(api_key, "2020-04-20", 900)
+homepower_kwh=interval_KWData(api_key, "2018-01-01", 900)
+
+power = homepower_kwh %>%
+  mutate(daily_kwh)
+homepower_kwh[153451,3]- homepower_kwh[153449,3]
+
+
 save(homepower_kwh, file = paste0(data.dir,"home_kwh.RData"))
 
 ```
@@ -56,21 +68,22 @@ Data stored:
 `r data.dir`
 
 Start date:
-`r first(power$date_hms)`
+`r first(homepower_kwh$date)`
 
 End date:
-`r last(power$date_hms)`
+`r last(homepower_kwh$date)`
 
 # Explore the Data
 
 ```{r}
-power_1=power %>%
-  mutate(month=month(date_hms),
-         day=day(date_hms),
-         hour=hour(date_hms))
+power=homepower_kwh %>%
+  mutate(month=month(date),
+         day=day(date))
 
-ggplot(data = power_1, aes(x=date_hms, y=kwh))+
+ggplot(data = power, aes(x=date, y=kwh))+
   geom_line(color = "#00AFBB")
+
+homepower_kwh[153451,3]- homepower_kwh[153449,3]
 
 ```
 
